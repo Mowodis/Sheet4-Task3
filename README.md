@@ -4,6 +4,8 @@ This repository corresponds to: `Theoretische Informatik 1, Ulrike von Luxburg, 
 Handin of:`Marcel Heine, Edwin Hoffmann`
 Tutor: `Long Nguyen` 
 
+The implemented algorithm is based of `Skript Pages ~308
+
 Contains an algorithm to determin the strongly connected components within a directed graph. 
 
 All written code for Task 3 is located is `\src\main\scala`.

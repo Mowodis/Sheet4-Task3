@@ -26,14 +26,28 @@ def printMatrix(matrix: Array[Array[Int]]) = {
     }
 }
 
+// display a list of SCCs in the console
+// each vertex has been assighed a number >= 1, increasing
+def printSCCs(matrix: Array[Array[Int]], name: String) : Unit = {
+    val newSCCs = findSCCs(matrix)
+    println("SCCs of graph: " + name)
+    
+    for (i <- 0 to newSCCs.length - 1)
+        print(" ( ")
+        
+        for (j <- 0 to newSCCs(i).length - 1) {
+            print(newSCCs(i)(j) + 1)
+            print(" ")
+        }
+        println(")")
+}
 
 def main(args: Array[String]): Unit = {
     
-    // testsamples 
+    // load test templates 
     val big_graph = createMatrix(1000,"src/main/resources/big_graph.csv")
     val small_graph = createMatrix(7,"src/main/resources/small_graph.csv")
     
-    println("A runing time of: " + dfs(small_graph, 1))
-    printMatrix(reverseGraph(small_graph))
-
+    println("SCCs: " + findSCCs(small_graph).toString())
+    printSCCs(small_graph, "small_graph")    
 }   

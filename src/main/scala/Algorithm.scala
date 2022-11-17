@@ -28,13 +28,14 @@ def getAdjacencies (matrix: Array[Array[Int]], vertex: Int) : List[Int] = {
     return newStack
 }
 
-// pahts a graph in DFS style
-// @param adjacency matrix, vertex of graph
-// @returns number of vertecies reachable from imput vertex (itselfe included)
-def dfs(matrix: Array[Array[Int]], vertex: Int) : Int = {
+/*pahts a graph in DFS style
+* def  @param adjacency matrix, vertex of graph (vertex being nat. Number >= 0)
+* @returns number of vertecies reachable from imput vertex (itselfe included)
+*/ 
+def dfsCCSize(matrix: Array[Array[Int]], vertex: Int) : Int = {
     
-    var vStatus = Array.ofDim[vColour](matrix.length)
-    var dfsStack = List[Int](vertex - 1)
+    var vStatus = new Array[vColour](matrix.length)
+    var dfsStack = List[Int](vertex)
 
     for (i <- 0 to matrix.length - 1) {
         vStatus(i) = vColour.White
@@ -55,12 +56,108 @@ def dfs(matrix: Array[Array[Int]], vertex: Int) : Int = {
     return cc
 } 
 
-def findSCC (matrix: Array[Array[Int]]): List[Int] = {
-    // Skript ~ 308
-    // run DFS(G, u) for all u vertices -> list storage of finishing times
-    // transpose G => G^t
-    // run DFS(G^t, u), callint u by decrasing f(u) (List)
-    // output/ save SCCs ?!
-    val temp = List[Int](1)
-    return temp
+/*pahts a graph in DFS style
+* @param (transposed) adjacency matrix, vertex of graph (vertex being nat. Number >= 0)
+* @returns retruns the adjacent (strongly) connected vertecies as a List of Integers
+*/ 
+def dfsCCList(matrix: Array[Array[Int]], vertex: Int) : List[Int] = {
+    
+    var vStatus = new Array[vColour](matrix.length)
+    var dfsStack = List[Int](vertex)
+
+    for (i <- 0 to matrix.length - 1) {
+        vStatus(i) = vColour.White
+    }
+
+    var ccList = List[Int]()
+    while (!dfsStack.isEmpty) {
+        val head = dfsStack.head      
+        dfsStack = dfsStack.drop(1)     // remove the head
+
+        if (vStatus(head) == vColour.White) {
+            dfsStack = getAdjacencies(matrix, head) ::: dfsStack
+            ccList = head :: ccList
+        } 
+        vStatus(head) = vColour.Grey    
+    }
+
+    return ccList
+} 
+
+// findSCCs helper function
+// removes all elements from toAddL-List which are already contained within a List of sccList
+def addSCC (toAddL: List[Int], sccList: List[List[Int]]) : List[List[Int]] = {
+    var newToAddL = toAddL
+    var toDelete = List[Int]()
+
+    for (i <- 0 to sccList.length - 1) {                // for each List in sccList
+        for (j <- 0 to newToAddL.length - 1) {          // for each element of newToAddL
+            if (sccList(i).contains(newToAddL(j))) {
+                toDelete = newToAddL(j) :: toDelete     // collect elemnts to be deleted later
+            }
+        }
+
+        for (k <- 0 to toDelete.length - 1) {           // delete vertecies         
+            newToAddL = newToAddL.filterNot(_ == toDelete(k))     
+        }
+    }
+
+    if (!newToAddL.isEmpty) {
+        val newSCCList = newToAddL :: sccList 
+
+        return newSCCList
+    } else {
+        return sccList
+    }
+}
+
+def sortByLargesV (array: Array[Int]) : Array[Int] = {
+    var maxSortedArray = new Array[Int](array.length)
+    var unsortedList = array
+    var indexOfMax = 0
+
+    for (i <- 0 to array.length - 1) {
+        indexOfMax = array.indexOf(array.max)   // find index of largest Integer
+        maxSortedArray(i) = indexOfMax          // write index 
+        array(indexOfMax) = 0                   // set lagest integer to 0
+    }
+
+    return maxSortedArray
+}
+
+/*Determins the Strongly Connected Components (SCCs)
+* @param adjacency matrix (graph)
+* @return a list SCCs which are again, represented as Lists of Integers (vertecies) 
+*/
+def findSCCs (matrix: Array[Array[Int]]): List[List[Int]] = {
+    
+    // run dfs for all vertecies and strore their cc sizes
+    val ccSizes = new Array[Int](matrix.length)
+    for (i <- 0 to matrix.length - 1) {
+        ccSizes(i) = dfsCCSize(matrix, i)
+    }
+
+    // transposes the adjacency matrix
+    val tMatrix = reverseGraph(matrix)
+
+    // sort ccSizes-indexes by hightes value
+    val sortedCCSizes = sortByLargesV(ccSizes)
+    
+    // add collect all SCCs    
+    var sccList = List[List[Int]]()
+    var tempCC = List[Int]()
+
+    // check if vertecies are already part of other SCCs and remove accordingly
+    for (i <- 0 to sortedCCSizes.length - 1) {
+        // starting with the vertex, which had the hightes ccSize
+        tempCC = dfsCCList(tMatrix, sortedCCSizes(i))     
+        
+        if (sccList.isEmpty) {
+            sccList = tempCC :: sccList
+        } else {
+            sccList = addSCC(tempCC, sccList)
+        } 
+    }
+
+    return sccList
 }
