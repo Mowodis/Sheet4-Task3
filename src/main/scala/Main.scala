@@ -2,7 +2,7 @@ import scala.io.Source
 
 
 // converts the matrix represented in a `.csv-file` into a `v x v-Matrix`
-def fillMatrix(v: Int, path: String): Array[Array[Int]] = {
+def createMatrix(v: Int, path: String): Array[Array[Int]] = {
     val matrix = Array.ofDim[Int](v,v)
     
     val buffer = scala.io.Source.fromFile(path)
@@ -26,12 +26,14 @@ def printMatrix(matrix: Array[Array[Int]]) = {
     }
 }
 
-// 
+
 def main(args: Array[String]): Unit = {
     
     // testsamples 
-    val big_graph = fillMatrix(1000,"src/main/resources/big_graph.csv")
-    val small_graph = fillMatrix(7,"src/main/resources/small_graph.csv")
+    val big_graph = createMatrix(1000,"src/main/resources/big_graph.csv")
+    val small_graph = createMatrix(7,"src/main/resources/small_graph.csv")
+    
+    println("A runing time of: " + dfs(small_graph, 1))
+    printMatrix(reverseGraph(small_graph))
 
-    printMatrix(small_graph)
 }   
