@@ -57,6 +57,7 @@ def main(args: Array[String]): Unit = {
     val fullyConnected_graph = createMatrix(5,"src/main/resources/fullyConnected_graph.csv")
     val simpleCycle_graph = createMatrix(3,"src/main/resources/simpleCycle_graph.csv")
     val twoCycle_graph = createMatrix(6,"src/main/resources/twoCycle_graph.csv")
+    // val empty_graph = createMatrix(0,"src/main/resources/empty_graph.csv")       // createMatrix can't handle
 
     printSCCs(big_graph, "big_graph")    
 }   
