@@ -59,5 +59,5 @@ def main(args: Array[String]): Unit = {
     val twoCycle_graph = createMatrix(6,"src/main/resources/twoCycle_graph.csv")
     // val empty_graph = createMatrix(0,"src/main/resources/empty_graph.csv")       // createMatrix can't handle
 
-    printSCCs(big_graph, "big_graph")    
+    printSCCs(small_graph, "small_graph")    
 }   
