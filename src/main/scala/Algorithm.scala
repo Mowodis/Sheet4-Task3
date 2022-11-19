@@ -1,4 +1,8 @@
-// transpose the input graph
+/** transpose the input matirx (graph)
+  *
+  * @param matrix
+  * @return matrix
+  */
 def reverseGraph(matrix: Array[Array[Int]]) : Array[Array[Int]] = {
     val len = matrix.length
     val reversedM = Array.ofDim[Int](len, len)
@@ -17,7 +21,12 @@ enum vColour {
     case White, Grey
 }
 
-// adds adycent vertecies of first vertex of the stack
+/** adds adycent vertecies of first vertex of the stack
+  *
+  * @param matrix
+  * @param vertex
+  * @return list of Int
+  */
 def getAdjacencies (matrix: Array[Array[Int]], vertex: Int) : List[Int] = {
     var newStack = List[Int]()
     for (i <- 0 to matrix.length - 1) {
@@ -28,10 +37,12 @@ def getAdjacencies (matrix: Array[Array[Int]], vertex: Int) : List[Int] = {
     return newStack
 }
 
-/*pahts a graph in DFS style
-* def  @param adjacency matrix, vertex of graph (vertex being nat. Number >= 0)
-* @returns number of vertecies reachable from imput vertex (itselfe included)
-*/ 
+/** pahts a graph in DFS style
+  *
+  * @param matrix
+  * @param vertex
+  * @return the number of reachable vertecies
+  */
 def dfsCCSize(matrix: Array[Array[Int]], vertex: Int) : Int = {
     
     var vStatus = new Array[vColour](matrix.length)
@@ -56,10 +67,12 @@ def dfsCCSize(matrix: Array[Array[Int]], vertex: Int) : Int = {
     return cc
 } 
 
-/*pahts a graph in DFS style
-* @param (transposed) adjacency matrix, vertex of graph (vertex being nat. Number >= 0)
-* @returns retruns the adjacent (strongly) connected vertecies as a List of Integers
-*/ 
+/** pahts a graph in DFS style
+  *
+  * @param matrix
+  * @param vertex
+  * @return list of reachable vertecies
+  */
 def dfsCCList(matrix: Array[Array[Int]], vertex: Int) : List[Int] = {
     
     var vStatus = new Array[vColour](matrix.length)
@@ -84,8 +97,13 @@ def dfsCCList(matrix: Array[Array[Int]], vertex: Int) : List[Int] = {
     return ccList
 } 
 
-// findSCCs helper function
-// removes all elements from toAddL-List which are already contained within a List of sccList
+/** findSCCs helper function
+  * removes all elements from toAddL-List which are already contained within a List of sccList
+  *
+  * @param toAddL
+  * @param sccList
+  * @return list of list of Int
+  */
 def addSCC (toAddL: List[Int], sccList: List[List[Int]]) : List[List[Int]] = {
     var newToAddL = toAddL
     var toDelete = List[Int]()
@@ -111,6 +129,12 @@ def addSCC (toAddL: List[Int], sccList: List[List[Int]]) : List[List[Int]] = {
     }
 }
 
+
+/** sorts the indices of input array by decreasing value
+  *
+  * @param array
+  * @return array of indeces of highest value, derecasing
+  */
 def sortByLargesV (array: Array[Int]) : Array[Int] = {
     var maxSortedArray = new Array[Int](array.length)
     var unsortedList = array
@@ -125,10 +149,11 @@ def sortByLargesV (array: Array[Int]) : Array[Int] = {
     return maxSortedArray
 }
 
-/*Determins the Strongly Connected Components (SCCs)
-* @param adjacency matrix (graph)
-* @return a list SCCs which are again, represented as Lists of Integers (vertecies) 
-*/
+/** Determins the Strongly Connected Components (SCCs) of a graph
+  *
+  * @param matrix
+  * @return list of list of integers
+  */
 def findSCCs (matrix: Array[Array[Int]]): List[List[Int]] = {
     
     // run dfs for all vertecies and strore their cc sizes

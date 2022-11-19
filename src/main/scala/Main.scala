@@ -1,7 +1,12 @@
 import scala.io.Source
 
 
-// converts the matrix represented in a `.csv-file` into a `v x v-Matrix`
+/** converts the matrix represented in a `.csv-file` into a `v x v-Matrix`
+  *
+  * @param v
+  * @param path
+  * @return twodimensional array
+  */
 def createMatrix(v: Int, path: String): Array[Array[Int]] = {
     val matrix = Array.ofDim[Int](v,v)
     
@@ -16,7 +21,10 @@ def createMatrix(v: Int, path: String): Array[Array[Int]] = {
     return matrix
 }
 
-// prints the input matrix in the console
+/** prints the input matrix in the console
+  *
+  * @param matrix
+  */
 def printMatrix(matrix: Array[Array[Int]]) = {
     for (i <- 0 to matrix.length-1) {
         for (j <- 0 to matrix.length-1) {
@@ -26,8 +34,11 @@ def printMatrix(matrix: Array[Array[Int]]) = {
     }
 }
 
-// display a list of SCCs in the console
-// each vertex has been assighed a number >= 1, increasing
+/** display a list of SCCs in the console
+  *
+  * @param matrix
+  * @param name
+  */
 def printSCCs(matrix: Array[Array[Int]], name: String) : Unit = {
     val newSCCs = findSCCs(matrix)
     
